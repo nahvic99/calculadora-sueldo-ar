@@ -1,10 +1,39 @@
 import './App.css';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { fetchAndActivate, getString } from "firebase/remote-config";
 import { remoteConfig } from './firebase';
 
 const formatMoney = (n) =>
   n.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', minimumFractionDigits: 2 });
+
+function AdBanner({ slot }) {
+  const adRef = useRef(null);
+
+  useEffect(() => {
+    const adNode = adRef.current;
+    if (!adNode) return;
+
+    if (adNode.getAttribute('data-adsbygoogle-status') === 'done') return;
+
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch {
+      // Prevent UI crashes if AdSense is blocked by the browser or extensions.
+    }
+  }, []);
+
+  return (
+    <ins
+      ref={adRef}
+      className="adsbygoogle"
+      style={{ display: 'block' }}
+      data-ad-client="ca-pub-2768901988841601"
+      data-ad-slot={slot}
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+    />
+  );
+}
 
 function App() {
   const [reglas, setReglas] = useState(null);
@@ -79,12 +108,7 @@ function App() {
     <div className="app">
       {/* AdSense top banner */}
       <div className="ad-banner" id="ad-top">
-        <ins className="adsbygoogle"
-          style={{ display: 'block' }}
-          data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-          data-ad-slot="XXXXXXXXXX"
-          data-ad-format="auto"
-          data-full-width-responsive="true" />
+        <AdBanner slot="XXXXXXXXXX" />
       </div>
 
       <header className="header">
@@ -203,12 +227,7 @@ function App() {
 
       {/* AdSense bottom banner */}
       <div className="ad-banner" id="ad-bottom">
-        <ins className="adsbygoogle"
-          style={{ display: 'block' }}
-          data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-          data-ad-slot="XXXXXXXXXX"
-          data-ad-format="auto"
-          data-full-width-responsive="true" />
+        <AdBanner slot="XXXXXXXXXX" />
       </div>
 
       <footer className="footer">
