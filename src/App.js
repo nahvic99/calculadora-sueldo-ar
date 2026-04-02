@@ -6,10 +6,15 @@ import { remoteConfig } from './firebase';
 const formatMoney = (n) =>
   n.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', minimumFractionDigits: 2 });
 
+const ADSENSE_TOP_SLOT = process.env.REACT_APP_ADSENSE_TOP_SLOT || '';
+const ADSENSE_BOTTOM_SLOT = process.env.REACT_APP_ADSENSE_BOTTOM_SLOT || '';
+
 function AdBanner({ slot }) {
   const adRef = useRef(null);
 
   useEffect(() => {
+    if (!slot) return;
+
     const adNode = adRef.current;
     if (!adNode) return;
 
@@ -20,7 +25,9 @@ function AdBanner({ slot }) {
     } catch {
       // Prevent UI crashes if AdSense is blocked by the browser or extensions.
     }
-  }, []);
+  }, [slot]);
+
+  if (!slot) return null;
 
   return (
     <ins
@@ -104,13 +111,10 @@ function App() {
     calcular(Number(val) || 0);
   };
 
+  const shouldShowAds = Boolean(desglose && !error);
+
   return (
     <div className="app">
-      {/* AdSense top banner */}
-      <div className="ad-banner" id="ad-top">
-        <AdBanner slot="XXXXXXXXXX" />
-      </div>
-
       <header className="header">
         <h1>Calculadora de Sueldo Neto</h1>
         <p className="subtitle">Argentina 2026 — Estimá tu sueldo de bolsillo</p>
@@ -144,6 +148,23 @@ function App() {
                 />
               </div>
             </div>
+
+            <section className="card content-card">
+              <h2>Cómo estimamos tu sueldo neto</h2>
+              <p>
+                Esta herramienta toma tu sueldo bruto mensual y aplica los descuentos obligatorios del trabajador en Argentina:
+                jubilación, obra social, PAMI y el adicional del Art. 13 cuando corresponde.
+              </p>
+              <ul>
+                <li>Calcula cada aporte de forma individual para que veas cuánto impacta cada concepto.</li>
+                <li>Evalúa si superás el mínimo no imponible de Ganancias.</li>
+                <li>Si corresponde, aplica la escala y alícuota del tramo alcanzado.</li>
+                <li>Te muestra el neto final y el porcentaje total de retención.</li>
+              </ul>
+              <p>
+                El resultado es orientativo y está pensado para ayudarte a planificar ingresos, negociar ajustes o comparar escenarios.
+              </p>
+            </section>
 
             {desglose && (
               <div className="results">
@@ -221,14 +242,39 @@ function App() {
                 </section>
               </div>
             )}
+
+            {shouldShowAds && ADSENSE_TOP_SLOT && (
+              <div className="ad-wrapper" id="ad-top">
+                <p className="ad-label">Publicidad</p>
+                <div className="ad-banner">
+                  <AdBanner slot={ADSENSE_TOP_SLOT} />
+                </div>
+              </div>
+            )}
+
+            <section className="card content-card">
+              <h2>Fuentes y alcance</h2>
+              <p>
+                Las reglas fiscales se cargan desde configuración remota para mantener valores actualizados durante el año sin que
+                tengas que esperar una nueva versión de la app.
+              </p>
+              <p>
+                Para decisiones formales de liquidación o temas contractuales, siempre conviene validar con tu recibo de sueldo,
+                convenio aplicable y asesoramiento contable.
+              </p>
+            </section>
           </>
         )}
       </main>
 
-      {/* AdSense bottom banner */}
-      <div className="ad-banner" id="ad-bottom">
-        <AdBanner slot="XXXXXXXXXX" />
-      </div>
+      {shouldShowAds && ADSENSE_BOTTOM_SLOT && (
+        <div className="ad-wrapper" id="ad-bottom">
+          <p className="ad-label">Publicidad</p>
+          <div className="ad-banner">
+            <AdBanner slot={ADSENSE_BOTTOM_SLOT} />
+          </div>
+        </div>
+      )}
 
       <footer className="footer">
         <p>Los valores se obtienen de fuentes oficiales y pueden variar. Esta herramienta es orientativa.</p>

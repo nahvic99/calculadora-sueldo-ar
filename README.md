@@ -2,6 +2,27 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Configuracion de AdSense para produccion
+
+La app renderiza dos banners (superior e inferior) solo si hay slots configurados.
+
+1. Crear un archivo `.env.production.local` con tus unidades reales:
+
+```
+REACT_APP_ADSENSE_TOP_SLOT=1234567890
+REACT_APP_ADSENSE_BOTTOM_SLOT=0987654321
+```
+
+2. Ejecutar build de produccion:
+
+```
+npm run build
+```
+
+3. Verificar que las unidades esten activas y aprobadas en AdSense.
+
+Nota: el publisher (`ca-pub-2768901988841601`) se define en `public/index.html` y en el componente de anuncio.
+
 ## Available Scripts
 
 In the project directory, you can run:
