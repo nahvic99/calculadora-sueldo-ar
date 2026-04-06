@@ -69,8 +69,7 @@ function App() {
     const jubilacion = bruto * aportes.jubilacion;
     const obraSocial = bruto * aportes.obra_social;
     const pami = bruto * aportes.pami;
-    const adicionalArt13 = bruto * (aportes.adicional_art_13 || 0);
-    const totalAportes = jubilacion + obraSocial + pami + adicionalArt13;
+    const totalAportes = jubilacion + obraSocial + pami;
 
     let retencionGanancias = 0;
     let tramoAplicado = null;
@@ -95,7 +94,6 @@ function App() {
       jubilacion,
       obraSocial,
       pami,
-      adicionalArt13,
       totalAportes,
       gananciaSujeta,
       retencionGanancias,
@@ -153,7 +151,7 @@ function App() {
               <h2>Cómo estimamos tu sueldo neto</h2>
               <p>
                 Esta herramienta toma tu sueldo bruto mensual y aplica los descuentos obligatorios del trabajador en Argentina:
-                jubilación, obra social, PAMI y el adicional del Art. 13 cuando corresponde.
+                jubilación, obra social y PAMI.
               </p>
               <ul>
                 <li>Calcula cada aporte de forma individual para que veas cuánto impacta cada concepto.</li>
@@ -183,12 +181,8 @@ function App() {
                     <span>PAMI (3%)</span>
                     <span className="amount negative">- {formatMoney(desglose.pami)}</span>
                   </div>
-                  <div className="line">
-                    <span>Adicional Art. 13 (1,5%)</span>
-                    <span className="amount negative">- {formatMoney(desglose.adicionalArt13)}</span>
-                  </div>
                   <div className="line subtotal">
-                    <span>Subtotal aportes (18,5%)</span>
+                    <span>Subtotal aportes (17%)</span>
                     <span className="amount negative">- {formatMoney(desglose.totalAportes)}</span>
                   </div>
                 </section>
